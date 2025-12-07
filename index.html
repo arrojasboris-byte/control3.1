@@ -56,7 +56,7 @@
       padding: 20px 18px 24px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 18px;
     }
 
     .logo {
@@ -108,7 +108,7 @@
     }
 
     .module-badge {
-      margin-top: 12px;
+      margin-top: 4px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -122,6 +122,44 @@
 
     .module-badge-icon {
       font-size: .9rem;
+    }
+
+    .side-nav {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .side-nav-item {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      padding: 7px 10px;
+      font-size: .8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    .side-nav-item span.icon {
+      font-size: .9rem;
+    }
+
+    .side-nav-item:hover {
+      background: rgba(15,23,42,0.75);
+      color: #e5e7eb;
+    }
+
+    .side-nav-item.active {
+      background: rgba(239,68,68,0.1);
+      border-color: #ef4444;
+      color: #fef2f2;
     }
 
     .sidebar-footer {
@@ -217,6 +255,14 @@
     .section-header span.sub {
       font-size: .78rem;
       color: var(--text-muted);
+    }
+
+    /* Views */
+    .view {
+      display: none;
+    }
+    .view.active {
+      display: block;
     }
 
     /* KPI pills */
@@ -446,13 +492,269 @@
       background: rgba(148,163,184,0.12);
     }
 
-    /* Informe de visita */
-    .visit-layout {
+    /* ----- GESTOR DE VISITAS (segunda pantalla) ----- */
+
+    .visit-planning-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr);
-      gap: 12px;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr);
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: .82rem;
+    }
+
+    .calendar-nav-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: transparent;
+      color: var(--text-main);
+      font-size: .76rem;
+      padding: 2px 8px;
+      cursor: pointer;
+    }
+
+    .calendar-nav-btn:hover {
+      background: rgba(148,163,184,0.16);
+    }
+
+    .calendar-month {
+      font-weight: 600;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0,1fr));
+      gap: 2px;
+      font-size: .7rem;
+    }
+
+    .calendar-day-name {
+      text-align: center;
+      padding: 4px 0;
+      color: var(--text-muted);
+    }
+
+    .calendar-cell {
+      height: 32px;
+      border-radius: 8px;
+      text-align: right;
+      padding: 4px 6px;
+      cursor: pointer;
+      position: relative;
+      border: 1px solid transparent;
+    }
+
+    .calendar-cell span.date-number {
+      font-size: .74rem;
+    }
+
+    .calendar-cell:hover {
+      background: rgba(148,163,184,0.15);
+    }
+
+    .calendar-cell-today {
+      border-color: #ef4444;
+      background: rgba(239,68,68,0.08);
+    }
+
+    .calendar-cell-empty {
+      cursor: default;
+    }
+
+    .calendar-cell-empty:hover {
+      background: transparent;
+    }
+
+    .calendar-dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #fbbf24;
+      left: 6px;
+      bottom: 4px;
+    }
+
+    .pending-visits {
+      margin-top: 10px;
+      border-top: 1px solid rgba(148,163,184,0.3);
+      padding-top: 8px;
+    }
+
+    .pending-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .8rem;
+      margin-bottom: 6px;
+    }
+
+    .pending-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 160px;
+      overflow-y: auto;
+      font-size: .76rem;
+    }
+
+    .pending-row {
+      display: grid;
+      grid-template-columns: minmax(0,1.4fr) minmax(0,1.2fr) auto auto;
+      gap: 6px;
+      align-items: center;
+      padding: 4px 6px;
+      border-radius: 10px;
+      background: rgba(15,23,42,0.8);
+    }
+
+    .pending-date {
+      font-weight: 600;
+    }
+    .pending-centro {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pending-status {
+      font-size: .7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(234,179,8,0.2);
+      border: 1px solid rgba(234,179,8,0.8);
+      color: #facc15;
+    }
+
+    .pending-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      background: transparent;
+      color: #e5e7eb;
+      font-size: .72rem;
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+
+    .pending-btn:hover {
+      background: rgba(148,163,184,0.2);
+    }
+
+    .pending-empty {
+      font-size: .74rem;
+      color: var(--text-muted);
+    }
+
+    /* Centros */
+    .centros-list {
+      list-style: none;
+      margin-top: 6px;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: .76rem;
+      max-height: 170px;
+      overflow-y: auto;
+    }
+
+    .centros-list li {
+      padding: 2px 4px;
+      border-radius: 6px;
+      background: rgba(15,23,42,0.7);
+    }
+
+    body.light-theme .centros-list li {
+      background: #f3f4f6;
+    }
+
+    .centros-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .centros-input {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #020617;
+      color: var(--text-main);
+      font-size: .76rem;
+      padding: 4px 8px;
+      outline: none;
+    }
+
+    body.light-theme .centros-input {
+      background: #f9fafb;
+      color: #111827;
+      border-color: #d1d5db;
+    }
+
+    .centros-add-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      background: transparent;
+      color: #e5e7eb;
+      font-size: .76rem;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+
+    .centros-add-btn:hover {
+      background: rgba(148,163,184,0.2);
+    }
+
+    .centros-file {
       margin-top: 4px;
-      font-size: .78rem;
+      font-size: .74rem;
+    }
+
+    /* Modal agendar visita */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #020617;
+      border-radius: 16px;
+      padding: 14px 16px 12px;
+      border: 1px solid rgba(148,163,184,0.7);
+      width: 320px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.65);
+      font-size: .8rem;
+    }
+
+    body.light-theme .modal-content {
+      background: #ffffff;
+      color: #111827;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 6px;
+      font-size: .9rem;
+    }
+
+    .modal-sub {
+      font-size: .74rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
     }
 
     .visit-field {
@@ -480,7 +782,7 @@
     }
 
     .visit-textarea {
-      min-height: 82px;
+      min-height: 80px;
       resize: vertical;
     }
 
@@ -490,6 +792,46 @@
       background: #f9fafb;
       color: #111827;
       border-color: #d1d5db;
+    }
+
+    .modal-actions {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .modal-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.8);
+      background: transparent;
+      color: #e5e7eb;
+      font-size: .76rem;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+
+    .modal-btn.primary {
+      border-color: #ef4444;
+      background: #ef4444;
+      color: #fef2f2;
+    }
+
+    .modal-btn:hover {
+      background: rgba(148,163,184,0.2);
+    }
+
+    .modal-btn.primary:hover {
+      background: #dc2626;
+    }
+
+    /* Informe visitas (segunda vista) */
+    .visit-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr);
+      gap: 12px;
+      margin-top: 10px;
+      font-size: .78rem;
     }
 
     .visit-meta-grid {
@@ -517,6 +859,150 @@
       background: #f3f4f6;
     }
 
+    .visit-charts-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    .chart-box {
+      border-radius: 14px;
+      padding: 8px;
+      background: rgba(15,23,42,0.7);
+      border: 1px solid rgba(15,23,42,0.9);
+      position: relative;
+    }
+
+    body.light-theme .chart-box {
+      background: #ffffff;
+      border-color: #e5e7eb;
+    }
+
+    .chart-box h4 {
+      font-size: .78rem;
+      margin-bottom: 4px;
+    }
+
+    .chart-tag {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: .66rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.25);
+      color: var(--text-muted);
+    }
+
+    .chart-box .chart-container {
+      height: 150px;
+    }
+
+    /* Adjuntar imágenes */
+    .images-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 8px;
+    }
+
+    .image-slot {
+      border-radius: 14px;
+      border: 1px dashed rgba(148,163,184,0.8);
+      padding: 10px;
+      font-size: .74rem;
+      text-align: center;
+    }
+
+    .image-slot input {
+      margin-top: 6px;
+      width: 100%;
+      font-size: .74rem;
+    }
+
+    /* Check interno + observaciones */
+    .visit-bottom-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .check-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+      font-size: .76rem;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .check-group-title {
+      font-size: .78rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .check-list {
+      list-style: none;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .check-list li {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .check-list input[type="checkbox"] {
+      transform: scale(0.9);
+    }
+
+    .observaciones-area {
+      width: 100%;
+      height: 260px;
+      resize: vertical;
+      font-size: .78rem;
+    }
+
+    .visit-footer {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .76rem;
+    }
+
+    .historial-card {
+      margin-top: 10px;
+      font-size: .78rem;
+    }
+
+    .historial-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: .76rem;
+    }
+
+    .historial-item {
+      padding: 4px 6px;
+      border-radius: 10px;
+      background: rgba(15,23,42,0.8);
+    }
+
+    body.light-theme .historial-item {
+      background: #f3f4f6;
+    }
+
     /* Toasts */
     .toast {
       position: fixed;
@@ -540,6 +1026,8 @@
       transform: translateY(6px);
     }
 
+    .no-print {}
+
     /* Print styles */
     @media print {
       @page {
@@ -549,11 +1037,10 @@
       body {
         background: #ffffff !important;
       }
-      .sidebar {
-        display: none !important;
-      }
-      .topbar .btn,
-      .filters-row {
+      .sidebar,
+      .topbar,
+      .filters-row,
+      .no-print {
         display: none !important;
       }
       .main {
@@ -562,6 +1049,9 @@
       .card {
         box-shadow: none !important;
         margin-bottom: 6px;
+      }
+      .visit-bottom-grid .check-card {
+        page-break-before: always;
       }
     }
 
@@ -578,7 +1068,11 @@
       }
       .grid-main,
       .grid-bottom,
-      .visit-layout {
+      .visit-planning-grid,
+      .visit-layout,
+      .visit-charts-grid,
+      .images-grid,
+      .visit-bottom-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -604,6 +1098,15 @@
       <span>Dashboard general</span>
     </div>
 
+    <nav class="side-nav">
+      <button class="side-nav-item active" data-view="dashboard">
+        <span class="icon">📈</span> Dashboard general
+      </button>
+      <button class="side-nav-item" data-view="informes">
+        <span class="icon">🗂️</span> Gestor de visitas
+      </button>
+    </nav>
+
     <div class="sidebar-footer">
       <p>Versión demo · Datos ficticios</p>
     </div>
@@ -612,7 +1115,7 @@
   <!-- MAIN -->
   <main class="main">
     <!-- Topbar -->
-    <div class="topbar">
+    <div class="topbar no-print">
       <button class="btn" id="btnToggleTheme">
         <span class="icon">☀️</span> Modo claro
       </button>
@@ -630,8 +1133,8 @@
       </button>
     </div>
 
-    <!-- Filtros -->
-    <div class="filters-row">
+    <!-- Filtros (dashboard) -->
+    <div class="filters-row no-print">
       <select class="select" id="selectCentro">
         <option value="todos">Centro: Todos</option>
         <option value="reina-mercedes">Madrid · Reina Mercedes</option>
@@ -649,246 +1152,425 @@
       </select>
     </div>
 
-    <!-- Resumen general -->
-    <div>
+    <!-- ====== VISTA 1: DASHBOARD GENERAL ====== -->
+    <section id="view-dashboard" class="view active">
+      <!-- Resumen general -->
+      <div>
+        <div class="section-header">
+          <h2>Resumen general KPIs</h2>
+          <span class="sub" id="resumenSub">
+            Visión rápida de procesos, HIT, primeros auxilios, conversiones y formaciones
+          </span>
+        </div>
+
+        <!-- KPIs -->
+        <section class="kpi-row">
+          <div class="kpi-pill" data-kpi-type="process">
+            <div class="kpi-main-block">
+              <span class="kpi-label">Procesos aplicados</span>
+              <span class="kpi-value" id="kpiProcesos">92%</span>
+            </div>
+            <span class="kpi-status" title="">
+              <span class="kpi-status-icon"></span>
+            </span>
+          </div>
+
+          <div class="kpi-pill" data-kpi-type="process">
+            <div class="kpi-main-block">
+              <span class="kpi-label">HIT global</span>
+              <span class="kpi-value" id="kpiHit">100%</span>
+            </div>
+            <span class="kpi-status" title="">
+              <span class="kpi-status-icon"></span>
+            </span>
+          </div>
+
+          <div class="kpi-pill" data-kpi-type="process">
+            <div class="kpi-main-block">
+              <span class="kpi-label">Primeros auxilios</span>
+              <span class="kpi-value" id="kpiPrimerosAuxilios">63%</span>
+            </div>
+            <span class="kpi-status" title="">
+              <span class="kpi-status-icon"></span>
+            </span>
+          </div>
+
+          <div class="kpi-pill" data-kpi-type="conversion">
+            <div class="kpi-main-block">
+              <span class="kpi-label">Conv. a prueba</span>
+              <span class="kpi-value" id="kpiConvPrueba">72%</span>
+            </div>
+            <span class="kpi-status" title="">
+              <span class="kpi-status-icon"></span>
+            </span>
+          </div>
+
+          <div class="kpi-pill" data-kpi-type="conversion">
+            <div class="kpi-main-block">
+              <span class="kpi-label">Conv. a venta</span>
+              <span class="kpi-value" id="kpiConvVenta">81%</span>
+            </div>
+            <span class="kpi-status" title="">
+              <span class="kpi-status-icon"></span>
+            </span>
+          </div>
+
+          <div class="kpi-pill" data-kpi-type="process">
+            <div class="kpi-main-block">
+              <span class="kpi-label">Formaciones</span>
+              <span class="kpi-value" id="kpiFormaciones">88%</span>
+            </div>
+            <span class="kpi-status" title="">
+              <span class="kpi-status-icon"></span>
+            </span>
+          </div>
+        </section>
+      </div>
+
+      <!-- Gráficos principales -->
+      <section class="grid-main">
+        <!-- Evolución mensual -->
+        <article class="card">
+          <span class="card-badge">% demo</span>
+          <h3>Evolución mensual de procesos y resultados</h3>
+          <p class="card-sub">
+            Barras de % procesos aplicados y curvas de HIT, conversión a prueba y conversión a venta
+          </p>
+          <div class="chart-container">
+            <canvas id="chartEvolucion"></canvas>
+          </div>
+        </article>
+
+        <!-- Estado de visitas -->
+        <article class="card">
+          <span class="card-badge">% demo</span>
+          <h3>Estado de visitas</h3>
+          <p class="card-sub">
+            Distribución de visitas realizadas, pendientes y anuladas · Ene – Dic
+          </p>
+          <div class="chart-container">
+            <canvas id="chartVisitas"></canvas>
+          </div>
+        </article>
+
+        <!-- Área de mejora -->
+        <article class="card">
+          <span class="card-badge">% demo</span>
+          <h3>Área de mejora de procesos</h3>
+          <p class="card-sub">
+            Top 10 criterios con mayor porcentaje de procesos no aplicados
+          </p>
+          <div class="chart-container tall">
+            <canvas id="chartAreaMejora"></canvas>
+          </div>
+        </article>
+
+        <!-- Ranking delegados -->
+        <article class="card">
+          <span class="card-badge">% demo</span>
+          <h3>Ranking por delegados · índice global</h3>
+          <p class="card-sub">
+            Índice global promedio de todos sus centros evaluados · Top 5 delegados
+          </p>
+          <div class="chart-container tall">
+            <canvas id="chartDelegados"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <!-- Bloque inferior: indicadores + criterios -->
+      <section class="grid-bottom">
+        <!-- % Procesos, HIT y ARR -->
+        <article class="card">
+          <span class="card-badge">% demo</span>
+          <h3>Indicadores globales · Procesos, HIT y ARR</h3>
+          <p class="card-sub">
+            % global de procesos aplicados, HIT y ARR en el conjunto de centros evaluados
+          </p>
+          <div class="chart-container">
+            <canvas id="chartProcesosHitArr"></canvas>
+          </div>
+        </article>
+
+        <!-- Criterios procesos -->
+        <article class="card">
+          <h3>Criterios de procesos evaluados</h3>
+          <p class="card-sub">
+            Checklist unificada (Corner + Exclusivo). Se muestran primero los criterios comunes en el orden Corner.
+          </p>
+          <ul id="listaCriterios" class="criteria-list"></ul>
+          <div class="criteria-footer">
+            <small id="criteriaResumen"></small>
+            <button class="criteria-btn" id="btnVerMasCriteria">Expandir a altura completa</button>
+          </div>
+        </article>
+      </section>
+    </section>
+
+    <!-- ====== VISTA 2: GESTOR DE VISITAS / INFORMES ====== -->
+    <section id="view-informes" class="view">
       <div class="section-header">
-        <h2>Resumen general KPIs</h2>
-        <span class="sub" id="resumenSub">
-          Visión rápida de procesos, HIT, primeros auxilios, conversiones y formaciones
+        <h2>Gestor de visitas e informes</h2>
+        <span class="sub">
+          Planificación de visitas, carga de centros y generación del informe de visita
         </span>
       </div>
 
-      <!-- KPIs -->
-      <section class="kpi-row">
-        <div class="kpi-pill" data-kpi-type="process">
-          <div class="kpi-main-block">
-            <span class="kpi-label">Procesos aplicados</span>
-            <span class="kpi-value" id="kpiProcesos">92%</span>
+      <!-- Planificación: calendario + centros -->
+      <section class="visit-planning-grid no-print">
+        <!-- Calendario + visitas pendientes -->
+        <article class="card">
+          <h3>Calendario de visitas</h3>
+          <p class="card-sub">
+            Selecciona un día del mes actual y agenda una visita con centro y responsable Audio.
+          </p>
+          <div class="calendar-header">
+            <button class="calendar-nav-btn" id="calPrev">&lt;</button>
+            <span class="calendar-month" id="calMonthLabel">Mes</span>
+            <button class="calendar-nav-btn" id="calNext">&gt;</button>
           </div>
-          <span class="kpi-status" title="">
-            <span class="kpi-status-icon"></span>
-          </span>
-        </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
 
-        <div class="kpi-pill" data-kpi-type="process">
-          <div class="kpi-main-block">
-            <span class="kpi-label">HIT global</span>
-            <span class="kpi-value" id="kpiHit">100%</span>
+          <div class="pending-visits">
+            <div class="pending-header">
+              <span>Visitas pendientes</span>
+              <small style="color:var(--text-muted);">Estado ámbar · demo</small>
+            </div>
+            <div class="pending-list" id="listaVisitasPendientes"></div>
           </div>
-          <span class="kpi-status" title="">
-            <span class="kpi-status-icon"></span>
-          </span>
-        </div>
+        </article>
 
-        <div class="kpi-pill" data-kpi-type="process">
-          <div class="kpi-main-block">
-            <span class="kpi-label">Primeros auxilios</span>
-            <span class="kpi-value" id="kpiPrimerosAuxilios">63%</span>
+        <!-- Centros -->
+        <article class="card">
+          <h3>Centros (adjuntar Excel)</h3>
+          <p class="card-sub">
+            Carga fija de centros desde Excel (demo) y añade centros manualmente para usarlos en el calendario.
+          </p>
+          <div class="centros-file">
+            <label for="inputExcelCentros">Adjuntar fichero Excel (demo):</label><br />
+            <input type="file" id="inputExcelCentros" />
           </div>
-          <span class="kpi-status" title="">
-            <span class="kpi-status-icon"></span>
-          </span>
-        </div>
-
-        <div class="kpi-pill" data-kpi-type="conversion">
-          <div class="kpi-main-block">
-            <span class="kpi-label">Conv. a prueba</span>
-            <span class="kpi-value" id="kpiConvPrueba">72%</span>
+          <div class="centros-actions">
+            <input id="nuevoCentroInput" class="centros-input" placeholder="Añadir centro manualmente..." />
+            <button class="centros-add-btn" id="btnAddCentro">Añadir</button>
           </div>
-          <span class="kpi-status" title="">
-            <span class="kpi-status-icon"></span>
-          </span>
-        </div>
-
-        <div class="kpi-pill" data-kpi-type="conversion">
-          <div class="kpi-main-block">
-            <span class="kpi-label">Conv. a venta</span>
-            <span class="kpi-value" id="kpiConvVenta">81%</span>
-          </div>
-          <span class="kpi-status" title="">
-            <span class="kpi-status-icon"></span>
-          </span>
-        </div>
-
-        <div class="kpi-pill" data-kpi-type="process">
-          <div class="kpi-main-block">
-            <span class="kpi-label">Formaciones</span>
-            <span class="kpi-value" id="kpiFormaciones">88%</span>
-          </div>
-          <span class="kpi-status" title="">
-            <span class="kpi-status-icon"></span>
-          </span>
-        </div>
+          <ul class="centros-list" id="listaCentros"></ul>
+          <small style="font-size:.7rem;color:var(--text-muted);">
+            Nota: lectura real del Excel pendiente de conexión · ahora se usa listado demo/local.
+          </small>
+          <datalist id="centrosList"></datalist>
+        </article>
       </section>
-    </div>
 
-    <!-- Gráficos principales -->
-    <section class="grid-main">
-      <!-- Evolución mensual -->
-      <article class="card">
-        <span class="card-badge">% demo</span>
-        <h3>Evolución mensual de procesos y resultados</h3>
+      <!-- INFORME DE VISITAS -->
+      <article class="card" id="informeVisitasSection">
+        <h3>Informe de visita</h3>
         <p class="card-sub">
-          Barras de % procesos aplicados y curvas de HIT, conversión a prueba y conversión a venta
+          Al crear un informe desde una visita pendiente se rellenan automáticamente los datos de cabecera (demo).
         </p>
-        <div class="chart-container">
-          <canvas id="chartEvolucion"></canvas>
-        </div>
-      </article>
 
-      <!-- Estado de visitas -->
-      <article class="card">
-        <span class="card-badge">% demo</span>
-        <h3>Estado de visitas</h3>
-        <p class="card-sub">
-          Distribución de visitas realizadas, pendientes y anuladas · Ene – Dic
-        </p>
-        <div class="chart-container">
-          <canvas id="chartVisitas"></canvas>
-        </div>
-      </article>
-
-      <!-- Área de mejora -->
-      <article class="card">
-        <span class="card-badge">% demo</span>
-        <h3>Área de mejora de procesos</h3>
-        <p class="card-sub">
-          Top 10 criterios con mayor porcentaje de procesos no aplicados
-        </p>
-        <div class="chart-container tall">
-          <canvas id="chartAreaMejora"></canvas>
-        </div>
-      </article>
-
-      <!-- Ranking delegados -->
-      <article class="card">
-        <span class="card-badge">% demo</span>
-        <h3>Ranking por delegados · índice global</h3>
-        <p class="card-sub">
-          Índice global promedio de todos sus centros evaluados · Top 5 delegados
-        </p>
-        <div class="chart-container tall">
-          <canvas id="chartDelegados"></canvas>
-        </div>
-      </article>
-    </section>
-
-    <!-- Bloque inferior alineado: indicadores + criterios -->
-    <section class="grid-bottom">
-      <!-- % Procesos, HIT y ARR -->
-      <article class="card">
-        <span class="card-badge">% demo</span>
-        <h3>Indicadores globales · Procesos, HIT y ARR</h3>
-        <p class="card-sub">
-          % global de procesos aplicados, HIT y ARR en el conjunto de centros evaluados
-        </p>
-        <div class="chart-container">
-          <canvas id="chartProcesosHitArr"></canvas>
-        </div>
-      </article>
-
-      <!-- Criterios procesos -->
-      <article class="card">
-        <h3>Criterios de procesos evaluados</h3>
-        <p class="card-sub">
-          Checklist unificada (Corner + Exclusivo). Se muestran primero los criterios comunes en el orden Corner.
-        </p>
-        <ul id="listaCriterios" class="criteria-list"></ul>
-        <div class="criteria-footer">
-          <small id="criteriaResumen"></small>
-          <button class="criteria-btn" id="btnVerMasCriteria">Ver más criterios</button>
-        </div>
-      </article>
-    </section>
-
-    <!-- NUEVO MÓDULO: INFORME DE VISITA -->
-    <section class="card" style="margin-top:16px;">
-      <h3>Informe de visita</h3>
-      <p class="card-sub">
-        Módulo demo para registrar el detalle de una visita y sus resultados. (Pendiente de conexión con datos reales.)
-      </p>
-      <div class="visit-layout">
-        <!-- Columna izquierda -->
-        <div>
-          <div class="visit-meta-grid">
-            <div class="visit-field">
-              <span class="visit-label">Centro</span>
-              <select class="visit-select">
-                <option>Selecciona centro...</option>
-                <option>Madrid · Reina Mercedes</option>
-                <option>Madrid · Tetuán</option>
-                <option>Sevilla · Nervión</option>
-                <option>Bilbao · Gran Vía</option>
-              </select>
+        <!-- Cabecera informe -->
+        <div class="visit-layout">
+          <!-- Columna izquierda -->
+          <div>
+            <div class="visit-meta-grid">
+              <div class="visit-field">
+                <span class="visit-label">Centro</span>
+                <input id="informeCentro" class="visit-input" placeholder="Centro de la visita" />
+              </div>
+              <div class="visit-field">
+                <span class="visit-label">Delegado</span>
+                <input id="informeDelegado" class="visit-input" placeholder="Nombre del delegado" />
+              </div>
             </div>
-            <div class="visit-field">
-              <span class="visit-label">Delegado</span>
-              <select class="visit-select">
-                <option>Selecciona delegado...</option>
-                <option>Blanca</option>
-                <option>Cecilia</option>
-                <option>Daniel</option>
-                <option>Eneritz</option>
-                <option>Luis</option>
-              </select>
+
+            <div class="visit-meta-grid" style="margin-top:6px;">
+              <div class="visit-field">
+                <span class="visit-label">Responsable Audio</span>
+                <select id="informeResponsableAudio" class="visit-select">
+                  <option value="">Selecciona responsable...</option>
+                  <option value="Ariannys Rojas">Ariannys Rojas</option>
+                  <option value="Sonia Guasque">Sonia Guasque</option>
+                </select>
+              </div>
+              <div class="visit-field">
+                <span class="visit-label">Fecha visita</span>
+                <input type="date" id="informeFecha" class="visit-input" />
+              </div>
             </div>
           </div>
 
-          <div class="visit-meta-grid">
-            <div class="visit-field">
-              <span class="visit-label">Fecha visita</span>
-              <input type="date" class="visit-input" />
+          <!-- Columna derecha -->
+          <div>
+            <div class="visit-meta-grid">
+              <div class="visit-field">
+                <span class="visit-label">Tipo de centro</span>
+                <select id="informeTipoCentro" class="visit-select">
+                  <option value="">Corner o Exclusivo...</option>
+                  <option value="Corner">Corner</option>
+                  <option value="Exclusivo">Exclusivo</option>
+                </select>
+              </div>
+              <div class="visit-field">
+                <span class="visit-label">Centro AAR</span>
+                <select id="informeCentroAAR" class="visit-select">
+                  <option value="">¿Centro AAR?</option>
+                  <option value="Si">Sí</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
             </div>
-            <div class="visit-field">
-              <span class="visit-label">Tipo visita</span>
-              <select class="visit-select">
-                <option>Regular</option>
-                <option>Apertura</option>
-                <option>Seguimiento</option>
-                <option>Formación</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="visit-field">
-            <span class="visit-label">% Procesos aplicados (demo)</span>
-            <input type="text" class="visit-input" value="84%" />
-          </div>
-          <div class="visit-field">
-            <span class="visit-label">% HIT / ARR (demo)</span>
-            <input type="text" class="visit-input" value="81% / 68%" />
-          </div>
-
-          <div class="visit-field">
-            <span class="visit-label">Etiquetas rápidas</span>
-            <div class="visit-tags">
-              <span class="visit-tag">✅ Objetivos cumplidos</span>
-              <span class="visit-tag">⚠️ Procesos mejorables</span>
-              <span class="visit-tag">📚 Formación realizada</span>
-              <span class="visit-tag">📝 Plan de acción</span>
+            <div class="visit-field" style="margin-top:6px;">
+              <span class="visit-label">Checklist evaluación (adjuntar fichero)</span>
+              <input type="file" id="informeChecklistFile" class="visit-input" />
             </div>
           </div>
         </div>
 
-        <!-- Columna derecha -->
-        <div>
-          <div class="visit-field">
-            <span class="visit-label">Resumen de la visita</span>
-            <textarea class="visit-textarea" placeholder="Descripción breve de los hitos de la visita, acuerdos, incidencias... (demo)"></textarea>
+        <!-- Gráficos del informe -->
+        <div class="visit-charts-grid">
+          <div class="chart-box">
+            <span class="chart-tag">% demo</span>
+            <h4>Radar de resultados</h4>
+            <div class="chart-container">
+              <canvas id="chartRadarInforme"></canvas>
+            </div>
           </div>
-          <div class="visit-field">
-            <span class="visit-label">Plan de acción / próximos pasos</span>
-            <textarea class="visit-textarea" placeholder="Acciones acordadas, responsable y fechas objetivo (demo)"></textarea>
+          <div class="chart-box">
+            <span class="chart-tag">% demo</span>
+            <h4>Áreas de mejora de procesos</h4>
+            <div class="chart-container">
+              <canvas id="chartAreaMejoraInforme"></canvas>
+            </div>
+          </div>
+          <div class="chart-box">
+            <span class="chart-tag">% demo</span>
+            <h4>KPIs de negocio visita</h4>
+            <div class="chart-container">
+              <canvas id="chartKpiInforme"></canvas>
+            </div>
           </div>
         </div>
-      </div>
+
+        <!-- Adjuntar imágenes -->
+        <div class="images-grid">
+          <div class="image-slot">
+            <strong>Imagen 1</strong>
+            <div style="font-size:.7rem;color:var(--text-muted);margin-top:2px;">Foto escaparate / PDV</div>
+            <input type="file" />
+          </div>
+          <div class="image-slot">
+            <strong>Imagen 2</strong>
+            <div style="font-size:.7rem;color:var(--text-muted);margin-top:2px;">Zona gabinete / audio</div>
+            <input type="file" />
+          </div>
+          <div class="image-slot">
+            <strong>Imagen 3</strong>
+            <div style="font-size:.7rem;color:var(--text-muted);margin-top:2px;">Otro detalle relevante</div>
+            <input type="file" />
+          </div>
+        </div>
+
+        <!-- Check interno + observaciones (2ª página en impresión) -->
+        <div class="visit-bottom-grid">
+          <!-- Check interno -->
+          <article class="card check-card">
+            <h3>Check interno (demo)</h3>
+            <p class="card-sub">
+              Formaciones y elementos de producto/comunicación revisados durante la visita. El checklist completo se puede adjuntar al informe.
+            </p>
+            <div class="check-groups">
+              <div>
+                <div class="check-group-title">Formaciones y habilidades</div>
+                <ul class="check-list">
+                  <li><input type="checkbox" /> <span>WSA</span></li>
+                  <li><input type="checkbox" /> <span>Starkey</span></li>
+                  <li><input type="checkbox" /> <span>Habilidades comerciales / Neuroventas</span></li>
+                  <li><input type="checkbox" /> <span>HIT</span></li>
+                  <li><input type="checkbox" /> <span>Telecare</span></li>
+                  <li><input type="checkbox" /> <span>PIA</span></li>
+                  <li><input type="checkbox" /> <span>Telehear</span></li>
+                  <li><input type="checkbox" /> <span>Financiación Infinity</span></li>
+                  <li><input type="checkbox" /> <span>Venta de seguro</span></li>
+                  <li><input type="checkbox" /> <span>Primeros auxilios (equipo)</span></li>
+                </ul>
+              </div>
+              <div>
+                <div class="check-group-title">Producto y comunicación</div>
+                <ul class="check-list">
+                  <li><input type="checkbox" /> <span>Audiometría RT</span></li>
+                  <li><input type="checkbox" /> <span>Test de lectura audio</span></li>
+                  <li><input type="checkbox" /> <span>Screening audio</span></li>
+                  <li><input type="checkbox" /> <span>Manteleta audio</span></li>
+                  <li><input type="checkbox" /> <span>Escaparate visible audio</span></li>
+                  <li><input type="checkbox" /> <span>Salud auditiva en PDV</span></li>
+                  <li><input type="checkbox" /> <span>Elementos Renove</span></li>
+                  <li><input type="checkbox" /> <span>Elementos MGM</span></li>
+                  <li><input type="checkbox" /> <span>Stock</span></li>
+                  <li><input type="checkbox" /> <span>Tchin Tchin</span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="visit-field" style="margin-top:8px;">
+              <span class="visit-label">Adjuntar check interno completo (Excel / PDF)</span>
+              <input type="file" class="visit-input" />
+            </div>
+          </article>
+
+          <!-- Observaciones -->
+          <article class="card">
+            <h3>Observaciones, recomendaciones y compromisos</h3>
+            <textarea id="informeObservaciones" class="visit-textarea observaciones-area" placeholder="Espacio de texto libre para observaciones clave, acuerdos con el centro, compromisos y próximos pasos (demo)."></textarea>
+          </article>
+        </div>
+
+        <!-- Footer informe -->
+        <div class="visit-footer">
+          <small style="color:var(--text-muted);">
+            Los porcentajes mostrados en las gráficas son datos demo hasta conectar con el checklist real.
+          </small>
+          <button class="btn" id="btnGuardarInforme">
+            <span class="icon">💾</span> Guardar informe
+          </button>
+        </div>
+
+        <!-- Historial de informes -->
+        <article class="card historial-card no-print">
+          <h3>Historial de informes (demo local)</h3>
+          <ul class="historial-list" id="historialInformesList"></ul>
+        </article>
+      </article>
     </section>
   </main>
 
-  <script>
-    // ------- GRÁFICOS (Chart.js) --------
+  <!-- Modal agendar visita -->
+  <div id="visitModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-content">
+      <h3>Agendar visita</h3>
+      <div class="modal-sub">
+        Fecha seleccionada: <span id="visitModalFecha"></span>
+      </div>
+      <div class="visit-field">
+        <span class="visit-label">Centro (buscar en listado)</span>
+        <input id="visitCentroInput" class="visit-input" list="centrosList" placeholder="Escribe para buscar centro..." />
+      </div>
+      <div class="visit-field">
+        <span class="visit-label">Responsable Audio</span>
+        <select id="visitResponsableSelect" class="visit-select">
+          <option value="">Selecciona responsable...</option>
+          <option value="Ariannys Rojas">Ariannys Rojas</option>
+          <option value="Sonia Guasque">Sonia Guasque</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn" id="btnCancelarVisita">Cancelar</button>
+        <button class="modal-btn primary" id="btnGuardarVisitaModal">Guardar visita</button>
+      </div>
+    </div>
+  </div>
 
-    // 1. Evolución mensual: barras + líneas
+  <script>
+    // ---------- GRÁFICOS DASHBOARD (Chart.js) ----------
     const ctxEvo = document.getElementById('chartEvolucion').getContext('2d');
     const chartEvolucion = new Chart(ctxEvo, {
       type: 'bar',
@@ -972,7 +1654,6 @@
       }
     });
 
-    // 2. Estado de visitas
     const ctxVis = document.getElementById('chartVisitas').getContext('2d');
     const chartVisitas = new Chart(ctxVis, {
       type: 'doughnut',
@@ -1006,7 +1687,6 @@
       }
     });
 
-    // 3. Área de mejora de procesos
     const ctxArea = document.getElementById('chartAreaMejora').getContext('2d');
     const chartAreaMejora = new Chart(ctxArea, {
       type: 'bar',
@@ -1063,7 +1743,6 @@
       }
     });
 
-    // 4. Ranking delegados
     const ctxDel = document.getElementById('chartDelegados').getContext('2d');
     const labelsDelegados = ['Blanca', 'Cecilia', 'Daniel', 'Eneritz', 'Luis'];
     const dataIndiceGlobal = [87, 92, 80, 85, 77];
@@ -1115,7 +1794,6 @@
       }
     });
 
-    // 5. Procesos, HIT y ARR
     const ctxPHA = document.getElementById('chartProcesosHitArr').getContext('2d');
     const chartProcesosHitArr = new Chart(ctxPHA, {
       type: 'bar',
@@ -1162,7 +1840,7 @@
       }
     });
 
-    // --- Criterios de procesos (unificado Corner + Exclusivo, DEMO) ---
+    // ---------- Criterios de procesos (lista) ----------
     const CRITERIOS_PROCESOS = [
       "Acogida al cliente con una sonrisa, amable y cercano",
       "Llamar al paciente por su nombre",
@@ -1256,7 +1934,6 @@
       "Criterio proceso demo 90"
     ];
 
-    const MAX_VISIBLE_CRITERIOS = 12;
     let criteriosExpandido = false;
 
     function renderCriterios() {
@@ -1283,24 +1960,15 @@
       });
 
       if (!criteriosExpandido) {
-        lista.scrollTop = 0;
-      }
-
-      if (CRITERIOS_PROCESOS.length > MAX_VISIBLE_CRITERIOS) {
-        if (!criteriosExpandido) {
-          resumen.textContent = `Listado completo de ${CRITERIOS_PROCESOS.length} criterios (scroll para ver más)`;
-          btn.textContent = 'Expandir a altura completa';
-          btn.style.display = 'inline-block';
-          lista.style.maxHeight = '210px';
-        } else {
-          resumen.textContent = `Mostrando todos los ${CRITERIOS_PROCESOS.length} criterios (alto ampliado)`;
-          btn.textContent = 'Volver a vista reducida';
-          btn.style.display = 'inline-block';
-          lista.style.maxHeight = 'none';
-        }
+        lista.style.maxHeight = '210px';
+        resumen.textContent = `Listado completo de ${CRITERIOS_PROCESOS.length} criterios (scroll para ver más)`;
+        btn.textContent = 'Expandir a altura completa';
+        btn.style.display = 'inline-block';
       } else {
-        resumen.textContent = `Mostrando todos los ${CRITERIOS_PROCESOS.length} criterios`;
-        btn.style.display = 'none';
+        lista.style.maxHeight = 'none';
+        resumen.textContent = `Mostrando todos los ${CRITERIOS_PROCESOS.length} criterios (alto ampliado)`;
+        btn.textContent = 'Volver a vista reducida';
+        btn.style.display = 'inline-block';
       }
     }
 
@@ -1309,7 +1977,7 @@
       renderCriterios();
     });
 
-    // --- Toast helper ---
+    // ---------- Toast helper ----------
     function showToast(message) {
       const toast = document.createElement('div');
       toast.className = 'toast';
@@ -1322,6 +1990,30 @@
       }, 1800);
     }
 
+    // ---------- Navegación vistas ----------
+    const sideNavButtons = document.querySelectorAll('.side-nav-item');
+    const viewDashboard = document.getElementById('view-dashboard');
+    const viewInformes = document.getElementById('view-informes');
+
+    function activarVista(nombre) {
+      if (nombre === 'dashboard') {
+        viewDashboard.classList.add('active');
+        viewInformes.classList.remove('active');
+      } else {
+        viewDashboard.classList.remove('active');
+        viewInformes.classList.add('active');
+      }
+      sideNavButtons.forEach(btn => {
+        if (btn.dataset.view === nombre) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+    }
+
+    sideNavButtons.forEach(btn => {
+      btn.addEventListener('click', () => activarVista(btn.dataset.view));
+    });
+
+    // ---------- Topbar / configuración ----------
     const btnSaveView = document.getElementById('btnSaveView');
     const btnExportHtml = document.getElementById('btnExportHtml');
     const btnSyncCloud = document.getElementById('btnSyncCloud');
@@ -1345,10 +2037,7 @@
 
     function actualizarTextoResumen() {
       const centroText = textoCentro(selectCentro.value);
-      const delegadoText = textoDelegado.select
-        ? textoDelegado(selectDelegado.value)
-        : textoDelegado(selectDelegado.value);
-
+      const delegadoText = textoDelegado(selectDelegado.value);
       resumenSub.textContent =
         'Visión rápida de procesos, HIT, primeros auxilios, conversiones y formaciones · ' +
         centroText + ' · ' + delegadoText + ' (datos demo)';
@@ -1388,6 +2077,7 @@
 
       if (cfg) {
         if (cfg.theme) applyTheme(cfg.theme);
+        else applyTheme('dark');
         if (cfg.centro) selectCentro.value = cfg.centro;
         if (cfg.delegado) selectDelegado.value = cfg.delegado;
       } else {
@@ -1450,25 +2140,22 @@
       });
     }
 
-    // Botón tema claro/oscuro
+    // Eventos topbar
     btnToggleTheme.addEventListener('click', () => {
       const isLight = !document.body.classList.contains('light-theme');
       applyTheme(isLight ? 'light' : 'dark');
       saveConfig();
     });
 
-    // Guardar vista
     btnSaveView.addEventListener('click', () => {
       saveConfig();
       showToast('Preferencias guardadas en este navegador');
     });
 
-    // Imprimir
     btnPrint.addEventListener('click', () => {
       window.print();
     });
 
-    // Exportar HTML
     btnExportHtml.addEventListener('click', () => {
       try {
         const htmlCompleto = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
@@ -1488,7 +2175,6 @@
       }
     });
 
-    // Actualizar nube (demo)
     btnSyncCloud.addEventListener('click', () => {
       showToast('Sincronización con la nube simulada (demo)');
     });
@@ -1503,8 +2189,436 @@
       saveConfig();
     });
 
-    // Init
+    // ---------- Gestor de visitas: datos demo ----------
+    const monthNamesEs = [
+      'Enero','Febrero','Marzo','Abril','Mayo','Junio',
+      'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'
+    ];
+
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
+    let centros = [
+      'Madrid · Reina Mercedes',
+      'Madrid · Tetuán',
+      'Sevilla · Nervión',
+      'Bilbao · Gran Vía'
+    ];
+
+    let visitasPendientes = [];
+    let historialInformes = [];
+    let modalFechaSeleccionada = null;
+
+    const calMonthLabel = document.getElementById('calMonthLabel');
+    const calendarGrid = document.getElementById('calendarGrid');
+    const listaVisitasPendientes = document.getElementById('listaVisitasPendientes');
+    const listaCentros = document.getElementById('listaCentros');
+    const centrosListDatalist = document.getElementById('centrosList');
+
+    function formatDateISO(year, month, day) {
+      const mm = String(month + 1).padStart(2, '0');
+      const dd = String(day).padStart(2, '0');
+      return `${year}-${mm}-${dd}`;
+    }
+
+    function formatDateES(iso) {
+      const [y,m,d] = iso.split('-').map(Number);
+      return `${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}/${y}`;
+    }
+
+    function renderCalendar(year, month) {
+      calMonthLabel.textContent = `${monthNamesEs[month]} ${year}`;
+      calendarGrid.innerHTML = '';
+
+      const firstDay = new Date(year, month, 1);
+      const startingDay = (firstDay.getDay() + 6) % 7; // lunes=0
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      const dayNames = ['L','M','X','J','V','S','D'];
+      dayNames.forEach(d => {
+        const div = document.createElement('div');
+        div.className = 'calendar-day-name';
+        div.textContent = d;
+        calendarGrid.appendChild(div);
+      });
+
+      for (let i = 0; i < startingDay; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'calendar-cell calendar-cell-empty';
+        calendarGrid.appendChild(cell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const iso = formatDateISO(year, month, day);
+        const cell = document.createElement('div');
+        cell.className = 'calendar-cell';
+        const span = document.createElement('span');
+        span.className = 'date-number';
+        span.textContent = day;
+        cell.appendChild(span);
+
+        const todayISO = formatDateISO(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+        if (iso === todayISO) {
+          cell.classList.add('calendar-cell-today');
+        }
+
+        if (visitasPendientes.some(v => v.fecha === iso)) {
+          const dot = document.createElement('div');
+          dot.className = 'calendar-dot';
+          cell.appendChild(dot);
+        }
+
+        cell.dataset.date = iso;
+        cell.addEventListener('click', () => abrirModalVisita(iso));
+        calendarGrid.appendChild(cell);
+      }
+    }
+
+    function renderCentros() {
+      listaCentros.innerHTML = '';
+      centrosListDatalist.innerHTML = '';
+      centros.forEach(c => {
+        const li = document.createElement('li');
+        li.textContent = c;
+        listaCentros.appendChild(li);
+
+        const opt = document.createElement('option');
+        opt.value = c;
+        centrosListDatalist.appendChild(opt);
+      });
+    }
+
+    function renderVisitasPendientes() {
+      listaVisitasPendientes.innerHTML = '';
+      if (!visitasPendientes.length) {
+        const p = document.createElement('p');
+        p.className = 'pending-empty';
+        p.textContent = 'No hay visitas pendientes (demo).';
+        listaVisitasPendientes.appendChild(p);
+        return;
+      }
+      visitasPendientes
+        .slice()
+        .sort((a,b) => a.fecha.localeCompare(b.fecha))
+        .forEach(v => {
+          const row = document.createElement('div');
+          row.className = 'pending-row';
+
+          const spanFecha = document.createElement('span');
+          spanFecha.className = 'pending-date';
+          spanFecha.textContent = formatDateES(v.fecha);
+
+          const spanCentro = document.createElement('span');
+          spanCentro.className = 'pending-centro';
+          spanCentro.textContent = v.centro;
+
+          const status = document.createElement('span');
+          status.className = 'pending-status';
+          status.textContent = 'Pendiente';
+
+          const btn = document.createElement('button');
+          btn.className = 'pending-btn';
+          btn.textContent = 'Crear informe';
+          btn.addEventListener('click', () => {
+            activarVista('informes');
+            cargarDatosInformeDesdeVisita(v);
+          });
+
+          row.appendChild(spanFecha);
+          row.appendChild(spanCentro);
+          row.appendChild(status);
+          row.appendChild(btn);
+          listaVisitasPendientes.appendChild(row);
+        });
+    }
+
+    function renderHistorialInformes() {
+      const ul = document.getElementById('historialInformesList');
+      ul.innerHTML = '';
+      if (!historialInformes.length) {
+        const li = document.createElement('li');
+        li.className = 'historial-item';
+        li.textContent = 'Aún no hay informes guardados en esta sesión (demo).';
+        ul.appendChild(li);
+        return;
+      }
+      historialInformes
+        .slice()
+        .sort((a,b) => b.timestamp.localeCompare(a.timestamp))
+        .forEach(inf => {
+          const li = document.createElement('li');
+          li.className = 'historial-item';
+          li.textContent = `${inf.fecha || 'Fecha sin definir'} · ${inf.centro || 'Centro'} · ${inf.responsable || 'Responsable'} · ${inf.tipoCentro || 'Tipo'} (${inf.centroAar || 'AAR n/d'})`;
+          ul.appendChild(li);
+        });
+    }
+
+    // ---------- Modal agendar visita ----------
+    const visitModal = document.getElementById('visitModal');
+    const visitModalFecha = document.getElementById('visitModalFecha');
+    const visitCentroInput = document.getElementById('visitCentroInput');
+    const visitResponsableSelect = document.getElementById('visitResponsableSelect');
+    const btnCancelarVisita = document.getElementById('btnCancelarVisita');
+    const btnGuardarVisitaModal = document.getElementById('btnGuardarVisitaModal');
+
+    function abrirModalVisita(isoFecha) {
+      modalFechaSeleccionada = isoFecha;
+      visitModalFecha.textContent = formatDateES(isoFecha);
+      visitCentroInput.value = '';
+      visitResponsableSelect.value = '';
+      visitModal.classList.add('active');
+      visitModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function cerrarModalVisita() {
+      visitModal.classList.remove('active');
+      visitModal.setAttribute('aria-hidden', 'true');
+    }
+
+    btnCancelarVisita.addEventListener('click', () => cerrarModalVisita());
+
+    btnGuardarVisitaModal.addEventListener('click', () => {
+      const centro = visitCentroInput.value.trim();
+      const responsable = visitResponsableSelect.value;
+      if (!modalFechaSeleccionada || !centro || !responsable) {
+        alert('Selecciona centro y responsable Audio para agendar la visita (demo).');
+        return;
+      }
+      visitasPendientes.push({
+        id: Date.now(),
+        fecha: modalFechaSeleccionada,
+        centro,
+        responsable
+      });
+      cerrarModalVisita();
+      renderVisitasPendientes();
+      renderCalendar(currentYear, currentMonth);
+      showToast('Visita agendada (demo)');
+    });
+
+    visitModal.addEventListener('click', (ev) => {
+      if (ev.target === visitModal) cerrarModalVisita();
+    });
+
+    // ---------- Eventos calendario / centros ----------
+    document.getElementById('calPrev').addEventListener('click', () => {
+      if (currentMonth === 0) {
+        currentMonth = 11;
+        currentYear--;
+      } else currentMonth--;
+      renderCalendar(currentYear, currentMonth);
+    });
+
+    document.getElementById('calNext').addEventListener('click', () => {
+      if (currentMonth === 11) {
+        currentMonth = 0;
+        currentYear++;
+      } else currentMonth++;
+      renderCalendar(currentYear, currentMonth);
+    });
+
+    document.getElementById('inputExcelCentros').addEventListener('change', () => {
+      showToast('Fichero Excel de centros registrado (lectura demo pendiente)');
+    });
+
+    document.getElementById('btnAddCentro').addEventListener('click', () => {
+      const input = document.getElementById('nuevoCentroInput');
+      const value = input.value.trim();
+      if (!value) return;
+      centros.push(value);
+      input.value = '';
+      renderCentros();
+      showToast('Centro añadido al listado demo');
+    });
+
+    // ---------- Informe de visitas: gráficas ----------
+    const radarCtx = document.getElementById('chartRadarInforme').getContext('2d');
+    const chartRadarInforme = new Chart(radarCtx, {
+      type: 'radar',
+      data: {
+        labels: ['Formaciones', 'Conv. venta', 'Conv. prueba', 'Aplicación procesos'],
+        datasets: [{
+          label: '% demo',
+          data: [78, 82, 75, 88],
+          borderColor: '#ef4444',
+          backgroundColor: 'rgba(239,68,68,0.25)',
+          borderWidth: 2,
+          pointRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            angleLines: { color: 'rgba(148,163,184,0.5)' },
+            grid: { color: 'rgba(148,163,184,0.5)' },
+            ticks: {
+              display: true,
+              showLabelBackdrop: false,
+              color: '#9ca3af',
+              callback: value => value + '%'
+            },
+            pointLabels: {
+              color: '#e5e7eb',
+              font: { size: 10, weight: 'bold' }
+            },
+            suggestedMin: 0,
+            suggestedMax: 100
+          }
+        },
+        plugins: {
+          legend: {
+            labels: { color: '#e5e7eb', font: { size: 10, weight: 'bold' } }
+          }
+        }
+      }
+    });
+
+    const areaInfCtx = document.getElementById('chartAreaMejoraInforme').getContext('2d');
+    const chartAreaMejoraInforme = new Chart(areaInfCtx, {
+      type: 'bar',
+      data: {
+        labels: [
+          'Seguimiento a 7 días',
+          'Entrega folleto HIT',
+          'Simulación financiación',
+          'Registro motivo no venta',
+          'Plan fidelización'
+        ],
+        datasets: [{
+          label: '% procesos no aplicados (f=0)',
+          data: [40, 35, 28, 26, 22],
+          backgroundColor: 'rgba(239,68,68,0.9)',
+          borderRadius: 6
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: { color: '#e5e7eb', font: { size: 10, weight: 'bold' } }
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.parsed.x}% no aplicado`
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: '#9ca3af',
+              font: { size: 10 },
+              callback: value => value + '%'
+            },
+            grid: { color: 'rgba(31,41,55,0.4)' },
+            suggestedMin: 0,
+            suggestedMax: 100
+          },
+          y: {
+            ticks: { color: '#9ca3af', font: { size: 10 } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    const kpiInfCtx = document.getElementById('chartKpiInforme').getContext('2d');
+    const chartKpiInforme = new Chart(kpiInfCtx, {
+      type: 'bar',
+      data: {
+        labels: ['HIT', 'AAR', 'Tchin Tchin', 'Seguros', 'Infinity', 'Stock', 'Formación RT', 'Primeros auxilios'],
+        datasets: [{
+          label: '% demo',
+          data: [91, 74, 63, 58, 69, 82, 77, 65],
+          backgroundColor: [
+            'rgba(239,68,68,0.9)',
+            'rgba(59,130,246,0.9)',
+            'rgba(234,179,8,0.9)',
+            'rgba(16,185,129,0.9)',
+            'rgba(168,85,247,0.9)',
+            'rgba(107,114,128,0.9)',
+            'rgba(14,165,233,0.9)',
+            'rgba(244,63,94,0.9)'
+          ],
+          borderRadius: 5
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: { color: '#e5e7eb', font: { size: 10, weight: 'bold' } }
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}%`
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: '#9ca3af', font: { size: 9 } },
+            grid: { color: 'rgba(31,41,55,0.35)' }
+          },
+          y: {
+            ticks: {
+              color: '#9ca3af',
+              font: { size: 10 },
+              callback: value => value + '%'
+            },
+            grid: { color: 'rgba(31,41,55,0.35)' },
+            suggestedMin: 40,
+            suggestedMax: 100
+          }
+        }
+      }
+    });
+
+    // ---------- Cargar datos informe desde visita ----------
+    function cargarDatosInformeDesdeVisita(v) {
+      document.getElementById('informeCentro').value = v.centro;
+      document.getElementById('informeResponsableAudio').value = v.responsable;
+      document.getElementById('informeFecha').value = v.fecha;
+      // el delegado se completará manualmente
+      document.getElementById('informeCentro').focus();
+      document.getElementById('informeVisitasSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ---------- Guardar informe ----------
+    document.getElementById('btnGuardarInforme').addEventListener('click', () => {
+      const informe = {
+        id: Date.now(),
+        centro: document.getElementById('informeCentro').value.trim(),
+        delegado: document.getElementById('informeDelegado').value.trim(),
+        responsable: document.getElementById('informeResponsableAudio').value,
+        fecha: document.getElementById('informeFecha').value,
+        tipoCentro: document.getElementById('informeTipoCentro').value,
+        centroAar: document.getElementById('informeCentroAAR').value,
+        observaciones: document.getElementById('informeObservaciones').value.trim(),
+        timestamp: new Date().toISOString()
+      };
+
+      historialInformes.push(informe);
+      renderHistorialInformes();
+      showToast('Informe guardado en historial (demo local)');
+    });
+
+    // ---------- Inicialización ----------
+    function initGestorVisitas() {
+      renderCentros();
+      renderVisitasPendientes();
+      renderCalendar(currentYear, currentMonth);
+      renderHistorialInformes();
+    }
+
     loadConfig();
+    initGestorVisitas();
   </script>
 </body>
 </html>
