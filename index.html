@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Gestionar Audio - Dashboard General</title>
+  <title>Gestión Audio - Dashboard General</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Fuente y estilos básicos -->
   <style>
@@ -69,13 +69,13 @@
     .logo-icon {
       width: 40px;
       height: 40px;
-      border-radius: 16px;
-      background: radial-gradient(circle at 30% 20%, #0ea5e9, #ef4444);
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fecaca, #b91c1c);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 18px rgba(239,68,68,.55);
       font-size: 1.4rem;
+      color: #fef2f2;
     }
 
     .logo-text {
@@ -150,36 +150,37 @@
     .btn {
       border-radius: 999px;
       padding: 8px 14px;
-      border: 1px solid transparent;
+      border: 1px solid #ef4444;
       font-size: .8rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: #0f172a;
-      color: var(--text-main);
-      transition: background .15s ease, transform .08s ease, box-shadow .15s ease;
+      background: #ef4444;
+      color: #fef2f2;
+      box-shadow: none;
+      transition: background .15s ease, transform .08s ease;
     }
 
     .btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(0,0,0,.4);
+      background: #dc2626;
+      box-shadow: none;
     }
 
     .btn-cta {
-      background: linear-gradient(90deg, #ef4444, #f97316);
-      color: #111827;
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(239,68,68,.35);
     }
 
     .btn-outline {
-      border-color: var(--border-soft);
-      background: transparent;
+      /* mismo estilo rojo, solo por semántica */
     }
 
-    body.light-theme .btn-outline {
-      background: #ffffff;
+    body.light-theme .btn {
+      background: #ef4444;
+      color: #fef2f2;
+      border-color: #ef4444;
+      box-shadow: none;
     }
 
     .btn span.icon {
@@ -236,26 +237,26 @@
 
     .kpi-pill {
       display: inline-flex;
-      align-items: baseline;
+      align-items: center;
       gap: 6px;
       padding: 6px 10px;
       border-radius: 999px;
       font-size: .78rem;
       cursor: default;
       border: 1px solid transparent;
-      box-shadow: 0 4px 10px rgba(15,23,42,.55);
+      box-shadow: none;
       background: rgba(15,23,42,.9);
       color: #e5e7eb;
     }
 
     body.light-theme .kpi-pill {
-      box-shadow: 0 4px 10px rgba(15,23,42,.18);
+      box-shadow: none;
       background: #ffffff;
       color: #111827;
     }
 
     .kpi-label {
-      opacity: .85;
+      opacity: .9;
     }
 
     .kpi-value {
@@ -310,6 +311,48 @@
     }
     body.light-theme .kpi-pill.formaciones {
       background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    }
+
+    .kpi-status {
+      font-size: .7rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    .kpi-status.optimo {
+      background: rgba(22,163,74,0.18);
+      border-color: rgba(22,163,74,0.7);
+      color: #bbf7d0;
+    }
+
+    .kpi-status.muybien {
+      background: rgba(234,179,8,0.18);
+      border-color: rgba(234,179,8,0.7);
+      color: #fef3c7;
+    }
+
+    .kpi-status.mejorable {
+      background: rgba(220,38,38,0.18);
+      border-color: rgba(220,38,38,0.7);
+      color: #fecaca;
+    }
+
+    body.light-theme .kpi-status.optimo {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #166534;
+    }
+    body.light-theme .kpi-status.muybien {
+      background: #fef9c3;
+      border-color: #eab308;
+      color: #854d0e;
+    }
+    body.light-theme .kpi-status.mejorable {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #991b1b;
     }
 
     /* Cards y grid de gráficos */
@@ -406,7 +449,7 @@
       <div class="logo-icon">🎧</div>
       <div class="logo-text">
         <div class="logo-title">
-          <span class="logo-title-gestion">Gestion</span><span class="logo-title-ar">ar Audio</span>
+          <span class="logo-title-gestion">Gestión</span><span class="logo-title-ar"> Audio</span>
         </div>
         <span class="logo-subtitle">Dashboard general de procesos y KPIs</span>
       </div>
@@ -470,29 +513,35 @@
 
       <!-- KPIs como botones sombreados horizontales -->
       <section class="kpi-row">
-        <div class="kpi-pill procesos">
+        <div class="kpi-pill procesos" data-kpi-type="process">
           <span class="kpi-label">Procesos aplicados</span>
-          <span class="kpi-value" id="kpiProcesos">84%</span>
+          <span class="kpi-value" id="kpiProcesos">92%</span>
+          <span class="kpi-status"></span>
         </div>
-        <div class="kpi-pill hit">
+        <div class="kpi-pill hit" data-kpi-type="process">
           <span class="kpi-label">HIT global</span>
-          <span class="kpi-value" id="kpiHit">81%</span>
+          <span class="kpi-value" id="kpiHit">100%</span>
+          <span class="kpi-status"></span>
         </div>
-        <div class="kpi-pill pa">
+        <div class="kpi-pill pa" data-kpi-type="process">
           <span class="kpi-label">Primeros auxilios</span>
           <span class="kpi-value" id="kpiPrimerosAuxilios">63%</span>
+          <span class="kpi-status"></span>
         </div>
-        <div class="kpi-pill conv-prueba">
+        <div class="kpi-pill conv-prueba" data-kpi-type="conversion">
           <span class="kpi-label">Conv. a prueba</span>
-          <span class="kpi-value" id="kpiConvPrueba">39%</span>
+          <span class="kpi-value" id="kpiConvPrueba">72%</span>
+          <span class="kpi-status"></span>
         </div>
-        <div class="kpi-pill conv-venta">
+        <div class="kpi-pill conv-venta" data-kpi-type="conversion">
           <span class="kpi-label">Conv. a venta</span>
-          <span class="kpi-value" id="kpiConvVenta">27%</span>
+          <span class="kpi-value" id="kpiConvVenta">81%</span>
+          <span class="kpi-status"></span>
         </div>
-        <div class="kpi-pill formaciones">
+        <div class="kpi-pill formaciones" data-kpi-type="process">
           <span class="kpi-label">Formaciones</span>
-          <span class="kpi-value" id="kpiFormaciones">18</span>
+          <span class="kpi-value" id="kpiFormaciones">88%</span>
+          <span class="kpi-status"></span>
         </div>
       </section>
     </div>
@@ -514,7 +563,7 @@
       <article class="card">
         <h3>Estado de visitas</h3>
         <p class="card-sub">
-          Distribución de visitas realizadas, pendientes y anuladas
+          Distribución de visitas realizadas, pendientes y anuladas · Ene – Dic
         </p>
         <div class="chart-container">
           <canvas id="chartVisitas"></canvas>
@@ -920,6 +969,54 @@
       }
 
       actualizarTextoResumen();
+      actualizarEstadosKpi();
+    }
+
+    // Clasificación de KPIs según reglas:
+    // Procesos, HIT, Primeros auxilios, Formaciones:
+    //   Óptimos = 100%
+    //   Muy bien = 85% - 99%
+    //   Mejorable = <85%
+    // Conversiones:
+    //   Óptimas = >=80%
+    //   Mejorable = <80%
+    function actualizarEstadosKpi() {
+      const kpiPills = document.querySelectorAll('.kpi-pill');
+      kpiPills.forEach(pill => {
+        const type = pill.getAttribute('data-kpi-type'); // 'process' o 'conversion'
+        const valueEl = pill.querySelector('.kpi-value');
+        const statusEl = pill.querySelector('.kpi-status');
+        if (!valueEl || !statusEl) return;
+
+        const raw = valueEl.textContent.trim().replace('%','');
+        const value = parseFloat(raw);
+        if (isNaN(value)) return;
+
+        let estado = 'mejorable';
+        let texto = 'Mejorable';
+
+        if (type === 'conversion') {
+          if (value >= 80) {
+            estado = 'optimo';
+            texto = 'Óptimo';
+          }
+        } else {
+          if (value >= 100) {
+            estado = 'optimo';
+            texto = 'Óptimo';
+          } else if (value >= 85) {
+            estado = 'muybien';
+            texto = 'Muy bien';
+          } else {
+            estado = 'mejorable';
+            texto = 'Mejorable';
+          }
+        }
+
+        statusEl.classList.remove('optimo','muybien','mejorable');
+        statusEl.classList.add(estado);
+        statusEl.textContent = texto;
+      });
     }
 
     // Botón tema claro/oscuro
@@ -943,7 +1040,7 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'gestionar-audio-dashboard-general.html';
+        a.download = 'gestion-audio-dashboard-general.html';
         document.body.appendChild(a);
         a.click();
         a.remove();
