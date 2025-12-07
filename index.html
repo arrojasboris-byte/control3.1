@@ -326,7 +326,7 @@
       margin-top: 4px;
     }
 
-    /* Grid central: gráficos + ranking */
+    /* Grid central: 4 gráficos */
     .grid-main {
       display: grid;
       grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
@@ -351,7 +351,11 @@
       width: 100%;
     }
 
-    /* Ranking tabla */
+    .chart-container.tall {
+      height: 260px;
+    }
+
+    /* Ranking tabla centros */
     .ranking-grid {
       margin-top: 12px;
     }
@@ -483,7 +487,6 @@
       <div class="delegate-filters">
         <div class="delegate-filters-title">Filtros rápidos · Delegados</div>
         <div class="delegate-pills">
-          <!-- Añadimos opción Todos -->
           <div class="delegate-pill active" data-delegado="">Todos</div>
           <div class="delegate-pill" data-delegado="Blanca">Blanca</div>
           <div class="delegate-pill" data-delegado="Cecilia">Cecilia</div>
@@ -591,20 +594,20 @@
       </article>
     </section>
 
-    <!-- Gráficos y estado visitas -->
+    <!-- 4 GRÁFICAS DEL DASHBOARD -->
     <section class="grid-main">
-      <!-- Evolución mensual -->
+      <!-- 1. Evolución mensual (barras + curvas: Procesos, HIT, Conv. prueba, Conv. venta) -->
       <article class="card">
-        <h3>Evolución mensual</h3>
+        <h3>Evolución mensual de procesos y resultados</h3>
         <p class="card-sub">
-          Visitas, aplicaciones en prueba y conversión a venta
+          Barras de % procesos aplicados y curvas de HIT, conversión a prueba y conversión a venta
         </p>
         <div class="chart-container">
           <canvas id="chartEvolucion"></canvas>
         </div>
       </article>
 
-      <!-- Estado visitas -->
+      <!-- 2. Estado de visitas -->
       <article class="card">
         <h3>Estado de visitas</h3>
         <p class="card-sub">
@@ -614,13 +617,35 @@
           <canvas id="chartVisitas"></canvas>
         </div>
       </article>
+
+      <!-- 3. Área de mejora de procesos -->
+      <article class="card">
+        <h3>Área de mejora de procesos</h3>
+        <p class="card-sub">
+          Top 10 criterios con mayor porcentaje de procesos no aplicados
+        </p>
+        <div class="chart-container tall">
+          <canvas id="chartAreaMejora"></canvas>
+        </div>
+      </article>
+
+      <!-- 4. % Procesos, HIT y ARR por delegado (ranking) -->
+      <article class="card">
+        <h3>Ranking por delegados · promedio de sus centros</h3>
+        <p class="card-sub">
+          % de procesos, HIT y ARR (promedio de todos sus centros evaluados · muestra top 5)
+        </p>
+        <div class="chart-container tall">
+          <canvas id="chartDelegados"></canvas>
+        </div>
+      </article>
     </section>
 
-    <!-- Ranking centros -->
+    <!-- Ranking centros (lo mantenemos como listado detallado) -->
     <section class="card">
       <h3>Ranking rápido de centros</h3>
       <p class="card-sub">
-        Mejores conversiones a venta y aplicación de procesos
+        Mejores conversiones a venta y aplicación de procesos (detalle por centro)
       </p>
       <div class="ranking-grid">
         <div class="ranking-header">
@@ -668,30 +693,50 @@
 
   <script>
     // ------- GRÁFICOS DEMO (Chart.js) --------
+
+    // 1. Evolución mensual: barras + líneas
     const ctxEvo = document.getElementById('chartEvolucion').getContext('2d');
     const chartEvolucion = new Chart(ctxEvo, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
         datasets: [
           {
-            label: 'Visitas realizadas',
-            data: [120,138,156,172,149,181,196,205,212,231,224,238],
-            borderWidth: 2,
-            tension: 0.35
+            type: 'bar',
+            label: '% Procesos aplicados',
+            data: [78, 80, 81, 82, 83, 84, 85, 86, 87, 88, 87, 88],
+            backgroundColor: 'rgba(34,197,94,0.6)',
+            borderRadius: 6
           },
           {
-            label: '% Aplicaciones a prueba',
-            data: [32,34,35,37,39,40,41,43,44,43,42,44],
+            type: 'line',
+            label: '% HIT',
+            data: [76, 77, 78, 79, 80, 81, 82, 83, 84, 83, 82, 82],
+            borderColor: '#38bdf8',
             borderWidth: 2,
-            borderDash: [4,4],
-            tension: 0.35
+            tension: 0.35,
+            fill: false,
+            pointRadius: 2
           },
           {
-            label: '% Conversión venta',
-            data: [21,22,23,24,25,26,27,28,29,27,26,27],
+            type: 'line',
+            label: '% Conversión a prueba',
+            data: [32, 33, 34, 35, 36, 37, 38, 39, 40, 40, 39, 40],
+            borderColor: '#a855f7',
             borderWidth: 2,
-            tension: 0.35
+            tension: 0.35,
+            fill: false,
+            pointRadius: 2
+          },
+          {
+            type: 'line',
+            label: '% Conversión a venta',
+            data: [21, 22, 23, 24, 25, 26, 27, 27, 28, 27, 26, 27],
+            borderColor: '#f97316',
+            borderWidth: 2,
+            tension: 0.35,
+            fill: false,
+            pointRadius: 2
           }
         ]
       },
@@ -709,16 +754,22 @@
         scales: {
           x: {
             ticks: { color: '#9ca3af', font: { size: 10 } },
-            grid: { color: 'rgba(31,41,55,0.5)' }
+            grid: { color: 'rgba(31,41,55,0.35)' },
+            stacked: false
           },
           y: {
-            ticks: { color: '#9ca3af', font: { size: 10 } },
-            grid: { color: 'rgba(31,41,55,0.5)' }
+            ticks: {
+              color: '#9ca3af',
+              font: { size: 10 },
+              callback: value => value + '%'
+            },
+            grid: { color: 'rgba(31,41,55,0.35)' }
           }
         }
       }
     });
 
+    // 2. Donut estado de visitas
     const ctxVis = document.getElementById('chartVisitas').getContext('2d');
     const chartVisitas = new Chart(ctxVis, {
       type: 'doughnut',
@@ -726,7 +777,12 @@
         labels: ['Realizadas', 'Pendientes', 'Anuladas'],
         datasets: [{
           data: [72, 19, 9],
-          borderWidth: 0
+          borderWidth: 0,
+          backgroundColor: [
+            'rgba(34,197,94,0.85)',
+            'rgba(59,130,246,0.85)',
+            'rgba(248,113,113,0.85)'
+          ]
         }]
       },
       options: {
@@ -742,6 +798,131 @@
           }
         },
         cutout: '65%'
+      }
+    });
+
+    // 3. Área de mejora de procesos (Top 10 criterios no aplicados)
+    const ctxArea = document.getElementById('chartAreaMejora').getContext('2d');
+    const chartAreaMejora = new Chart(ctxArea, {
+      type: 'bar',
+      data: {
+        labels: [
+          'Seguimiento a 7 días',
+          'Entrega folleto HIT',
+          'Simulación financiación',
+          'Registro motivo no venta',
+          'Uso guion ACE',
+          'Teleaudiometría',
+          'Derivación ORL',
+          'Plan fidelización',
+          'Registro competidor',
+          'Revisión preventiva'
+        ],
+        datasets: [{
+          label: '% procesos no aplicados',
+          data: [38, 34, 31, 29, 27, 25, 22, 20, 18, 15],
+          backgroundColor: 'rgba(248,113,113,0.9)',
+          borderRadius: 6
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#e5e7eb',
+              font: { size: 11 }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => ctx.parsed.x + '% no aplicado'
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: '#9ca3af',
+              font: { size: 10 },
+              callback: value => value + '%'
+            },
+            grid: { color: 'rgba(31,41,55,0.35)' }
+          },
+          y: {
+            ticks: { color: '#9ca3af', font: { size: 10 } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // 4. % Procesos, HIT y ARR por delegado (ranking top 5)
+    const ctxDel = document.getElementById('chartDelegados').getContext('2d');
+    const labelsDelegados = ['Blanca', 'Cecilia', 'Daniel', 'Eneritz', 'Luis']; // top 5 (resto ocultos)
+    const dataProcesosDeleg = [88, 92, 79, 81, 76];
+    const dataHitDeleg = [84, 89, 75, 78, 72];
+    const dataArrDeleg = [66, 71, 60, 63, 59]; // ARR como indicador adicional de resultado
+
+    const chartDelegados = new Chart(ctxDel, {
+      type: 'bar',
+      data: {
+        labels: labelsDelegados,
+        datasets: [
+          {
+            label: '% Procesos',
+            data: dataProcesosDeleg,
+            backgroundColor: 'rgba(34,197,94,0.85)',
+            borderRadius: 5
+          },
+          {
+            label: '% HIT',
+            data: dataHitDeleg,
+            backgroundColor: 'rgba(59,130,246,0.85)',
+            borderRadius: 5
+          },
+          {
+            label: '% ARR',
+            data: dataArrDeleg,
+            backgroundColor: 'rgba(168,85,247,0.85)',
+            borderRadius: 5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#e5e7eb',
+              font: { size: 11 }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '%'
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: '#9ca3af', font: { size: 10 } },
+            grid: { color: 'rgba(31,41,55,0.35)' }
+          },
+          y: {
+            ticks: {
+              color: '#9ca3af',
+              font: { size: 10 },
+              callback: value => value + '%'
+            },
+            grid: { color: 'rgba(31,41,55,0.35)' },
+            suggestedMin: 50,
+            suggestedMax: 100
+          }
+        }
       }
     });
 
@@ -800,7 +981,7 @@
       pill.addEventListener('click', () => {
         const delegadoPill = pill.getAttribute('data-delegado') || '';
 
-        // Si ya estaba activo, lo desactivamos para volver a "Todos"
+        // Si ya estaba activo, y no es "Todos", al hacer clic volvemos a "Todos"
         if (pill.classList.contains('active') && delegadoPill !== '') {
           delegatePills.forEach(p => p.classList.remove('active'));
           const pillTodos = document.querySelector('.delegate-pill[data-delegado=""]');
@@ -884,7 +1065,6 @@
     // Botón Actualizar nube (demo)
     const btnSyncCloud = document.getElementById('btnSyncCloud');
     btnSyncCloud.addEventListener('click', () => {
-      // Aquí en producción iría la llamada a tu backend / API
       showToast('Sincronización con la nube simulada (demo)');
     });
 
