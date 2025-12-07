@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es"><head>
+<html lang="es">
+<head>
   <meta charset="UTF-8">
   <title>Control Center Audio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -443,7 +444,7 @@
     .criterios-container {
       min-height: 260px;
       max-height: 320px;
-      overflow-y: auto; /* scroll vertical para ver todos los criterios */
+      overflow-y: auto;
     }
 
     .ranking-list {
@@ -511,7 +512,7 @@
       color: var(--text-main);
     }
 
-    /* CENTROS PAGE Y DEMÁS (igual que antes) */
+    /* CENTROS PAGE Y DEMÁS */
     .centros-top {
       display: grid;
       grid-template-columns: 1.2fr 1.2fr 1fr;
@@ -1064,6 +1065,13 @@
       background:#ffffff;
     }
 
+    .radio-small {
+      font-size:.74rem;
+      display:inline-flex;
+      align-items:center;
+      gap:3px;
+    }
+
     /* RESPONSIVE */
     @media (max-width: 1400px) {
       .dashboard-grid {
@@ -1149,7 +1157,7 @@
       }
       .panel-graficos {
         max-height:none !important;
-        overflow:visible !Important;
+        overflow:visible !important;
       }
       .card {
         box-shadow:none !important;
@@ -1501,11 +1509,20 @@
                   <input id="infHoras" class="field-input">
                 </div>
                 <div class="dato-full" style="margin-top:4px;">
-                  <button class="btn btn-cta" id="btnAdjuntarChecklist">
-                    <span class="icon">📎</span> Adjuntar checklist
-                  </button>
-                  <input type="file" id="inputChecklist" accept=".xlsx,.xls" style="display:none">
-                  <span id="nombreChecklist" style="margin-left:8px; font-size:.74rem; color:var(--text-muted);"></span>
+                  <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+                    <button class="btn btn-cta" id="btnAdjuntarChecklist">
+                      <span class="icon">📎</span> Adjuntar checklist
+                    </button>
+                    <input type="file" id="inputChecklist" accept=".xlsx,.xls" style="display:none">
+                    <span id="nombreChecklist" style="font-size:.74rem; color:var(--text-muted);"></span>
+                    <span style="font-size:.74rem; margin-left:4px;">Tipo checklist:</span>
+                    <label class="radio-small">
+                      <input type="radio" name="tipoChecklist" value="corner" checked> Corner
+                    </label>
+                    <label class="radio-small">
+                      <input type="radio" name="tipoChecklist" value="exclusivo"> Exclusivo
+                    </label>
+                  </div>
                 </div>
               </div>
             </article>
@@ -1544,7 +1561,7 @@
               </div>
               <div class="chart-container">
                 <canvas id="chartCentroSiNoDonut"></canvas>
-              </div>
+             div>
             </article>
 
             <article class="card">
@@ -1920,7 +1937,7 @@
           <td><span class="tag ${t === 'Exclusivo' ? 'exclusivo' : 'corner'}">${t}</span></td>
           <td>
             <button class="btn-link btn-informe-centro" data-centro="${c.centro}">
-              ${informes ? `Ver (${informes})` : "Añadir informe"}
+              ${informes ? \`Ver (\${informes})\` : "Añadir informe"}
             </button>
           </td>
           <td>
@@ -2330,7 +2347,7 @@
     /* 80 CRITERIOS: estructura global */
     const criteriosGlobal = new Map(); // nombre -> {nombre, suma, total}
     let criteriosDemoActivo = false;
-    let ultimoChecklistCentro = null;  // {centro, data}
+    let ultimoChecklistCentro = null;
     const globalCharts = {};
 
     function normalizarPorcentaje(v) {
@@ -2343,8 +2360,95 @@
       if (num <= 1) return Math.round(num * 100);
       return Math.round(num);
     }
-
     const clampPct = v => Math.max(0, Math.min(100, v));
+
+    function getCellNumber(sheet, addr) {
+      const cell = sheet[addr];
+      if (!cell) return 0;
+      return clampPct(normalizarPorcentaje(cell.v));
+    }
+    function getBooleanCell(sheet, addr) {
+      const cell = sheet[addr];
+      if (!cell) return false;
+      const v = (""+cell.v).toLowerCase();
+      return v === "1" || v === "si" || v === "sí" || v === "x";
+    }
+
+    function parseChecklistCorner(sheet) {
+      const criterios = [];
+      let totalCriterios = 0;
+      let totalAplica = 0;
+
+      for (let r = 7; r <= 88; r++) {
+        const critCell = sheet["B"+r];
+        if (!critCell) continue;
+        const nombre = String(critCell.v || "").trim();
+        if (!nombre) continue;
+        const valCell = sheet["F"+r];
+        const rawVal  = valCell ? valCell.v : 0;
+        const aplica  = Number(rawVal) === 1;
+        criterios.push({nombre, aplica});
+        totalCriterios++;
+        if (aplica) totalAplica++;
+      }
+
+      const procesosXls  = getCellNumber(sheet,"F90");
+      const convPrueba   = getCellNumber(sheet,"B92");
+      const convVenta    = getCellNumber(sheet,"B93");
+      const hit          = getBooleanCell(sheet,"F63");
+
+      const procesosCalc = totalCriterios ? Math.round(100 * totalAplica / totalCriterios) : 0;
+      const procesosFinal = procesosXls || procesosCalc;
+      const areasMejora = totalCriterios - totalAplica;
+
+      return {
+        tipo: "CORNER",
+        procesosPct: procesosFinal,
+        convPruebaPct: convPrueba,
+        convVentaPct: convVenta,
+        hit,
+        criterios,
+        areasMejora
+      };
+    }
+
+    function parseChecklistExclusivo(sheet) {
+      const criterios = [];
+      let totalCriterios = 0;
+      let totalAplica = 0;
+
+      for (let r = 8; r <= 102; r++) {
+        const critCell = sheet["B"+r];
+        if (!critCell) continue;
+        const nombre = String(critCell.v || "").trim();
+        if (!nombre) continue;
+        const valCell = sheet["F"+r];
+        const rawVal  = valCell ? valCell.v : 0;
+        const aplica  = Number(rawVal) === 1;
+        criterios.push({nombre, aplica});
+        totalCriterios++;
+        if (aplica) totalAplica++;
+      }
+
+      const procesosXls  = getCellNumber(sheet,"F104");
+      const convPrueba   = getCellNumber(sheet,"I126");
+      const convVenta    = getCellNumber(sheet,"I127");
+      const hit          = getBooleanCell(sheet,"F65");
+
+      const procesosCalc = totalCriterios ? Math.round(100 * totalAplica / totalCriterios) : 0;
+      const procesosFinal = procesosXls || procesosCalc;
+      const areasMejora = totalCriterios - totalAplica;
+
+      return {
+        tipo: "EXCLUSIVO",
+        procesosPct: procesosFinal,
+        convPruebaPct: convPrueba,
+        convVentaPct: convVenta,
+        hit,
+        criterios,
+        areasMejora
+      };
+    }
 
     function seedCriteriosDemo() {
       criteriosDemoActivo = true;
@@ -2352,88 +2456,13 @@
       const total = 80;
       for (let i = 1; i <= total; i++) {
         const nombre = `Criterio ${i}`;
-        const pct = 60 + Math.round(Math.random()*40); // 60–100 %
+        const pct = 60 + Math.round(Math.random()*40);
         criteriosGlobal.set(nombre, { nombre, suma: pct, total: 100 });
       }
       actualizarGraficoCriterios();
     }
 
-    function parseChecklistRows(rows, tipo) {
-      // Lectura genérica que funciona tanto para CHECKLIST CORNER como para CHECKLIST EXCLUSIVO
-      // sin depender de filas/columnas fijas. Busca en cada fila un texto (criterio)
-      // y un valor lógico 0 / 1 / 2 en las primeras columnas.
-      const criterios = [];
-      let totalCriterios = 0;
-      let totalAplica = 0;
-      let hit = false;
-
-      // Recorremos todas las filas del Excel
-      for (let r = 0; r < rows.length; r++) {
-        const row = rows[r] || [];
-        if (!row.length) continue;
-
-        let colTexto = -1;
-        let colValor = -1;
-
-        // Buscamos en las primeras columnas el texto del criterio y el valor 0/1/2
-        const maxCols = Math.min(row.length, 8);
-        for (let c = 0; c < maxCols; c++) {
-          const val = row[c];
-          if (colTexto === -1 && typeof val === "string" && val.trim().length > 3) {
-            colTexto = c;
-          }
-          if (colValor === -1 && (val === 0 || val === 1 || val === 2)) {
-            colValor = c;
-          }
-        }
-
-        if (colTexto !== -1 && colValor !== -1) {
-          const nombre = String(row[colTexto]).trim();
-          const v = row[colValor];
-
-          // 1 = aplica, 0 = no aplica, 2 = lo tratamos como "aplica" para no penalizar
-          const aplica = (v === 1 || v === 2);
-
-          criterios.push({ nombre, aplica });
-          totalCriterios++;
-          if (aplica) totalAplica++;
-
-          // Detección de HIT: cualquier criterio cuyo texto contenga "HIT" y esté marcado
-          if (nombre.toUpperCase().includes("HIT") && aplica) {
-            hit = true;
-          }
-        }
-      }
-
-      // % de aplicación de procesos calculado desde los criterios
-      const procesosPct = totalCriterios
-        ? Math.round((100 * totalAplica) / totalCriterios)
-        : 0;
-
-      const areasMejora = totalCriterios - totalAplica;
-
-      // Intento de inferir alguna métrica de conversión si el checklist la tuviera.
-      // Buscamos el valor numérico (>= 10 y <= 100) más alto del archivo como demo.
-      let maxPct = 0;
-      for (let r = 0; r < rows.length; r++) {
-        const row = rows[r] || [];
-        for (let c = 0; c < row.length; c++) {
-          const v = row[c];
-          if (typeof v === "number" && !Number.isNaN(v) && v >= 10 && v <= 100) {
-            if (v > maxPct) maxPct = v;
-          }
-        }
-      }
-
-      // Si no encontramos nada, dejamos un valor demo de 80%
-      const convPruebaPct = maxPct || 80;
-      const convVentaPct  = maxPct || 80;
-
-      return { tipo, procesosPct, convPruebaPct, convVentaPct, hit, criterios, areasMejora };
-    }
-
     function integrarChecklistEnMetricas(centroNombre, parsed) {
-      // si había datos demo, los limpiamos al primer checklist real
       if (criteriosDemoActivo) {
         criteriosGlobal.clear();
         criteriosDemoActivo = false;
@@ -2460,20 +2489,19 @@
       if (!lista.length) return;
 
       lista.sort((a,b)=>b.pct - a.pct);
-      const maxCriterios = 82;
+      const maxCriterios = 120;
       const top = lista.slice(0, maxCriterios);
       const labels = top.map(i => i.nombre);
       const data   = top.map(i => i.pct);
       const colors = top.map(i =>
-        i.pct >= 100 ? "#16a34a" :     // 100% Óptimo
-        i.pct >= 85  ? "#22c55e" :     // 85–99% Muy bien
-                       "#ef4444"       // <85% Mejorable
+        i.pct >= 100 ? "#16a34a" :
+        i.pct >= 85  ? "#22c55e" :
+                       "#ef4444"
       );
 
       const msg = $("#criteriosEmptyMsg");
       if (msg) msg.style.display = "none";
 
-      // altura del canvas según nº de criterios -> scroll en el contenedor
       const canvas = document.getElementById("chartCriteriosDetalle");
       if (canvas) {
         const pxPerRow = 18;
@@ -2536,6 +2564,18 @@
     }
 
     function procesarChecklist(file, centroNombre) {
+      const nameLower = file.name.toLowerCase();
+      if (!nameLower.includes("checklist") && !nameLower.includes("checlist")) {
+        alert('El archivo debe tener la palabra "checklist" en el nombre.');
+        return;
+      }
+      const tipoSelEl = document.querySelector('input[name="tipoChecklist"]:checked');
+      if (!tipoSelEl) {
+        alert("Selecciona si el checklist es Corner o Exclusivo.");
+        return;
+      }
+      const tipoSel = tipoSelEl.value; // "corner" o "exclusivo"
+
       const reader = new FileReader();
       reader.onload = evt => {
         try {
@@ -2543,23 +2583,23 @@
           const workbook = XLSX.read(data, { type: "array" });
           const sheetName = workbook.SheetNames[0];
           const sheet = workbook.Sheets[sheetName];
-          const rows = XLSX.utils.sheet_to_json(sheet, { header:1 });
-          const nameUpper = file.name.toUpperCase();
-          let tipo = "CORNER";
-          if (nameUpper.includes("EXCLUSIVO")) tipo = "EXCLUSIVO";
-          else if (nameUpper.includes("CORNER")) tipo = "CORNER";
-          const parsed = parseChecklistRows(rows, tipo);
+
+          let parsed;
+          if (tipoSel === "corner") parsed = parseChecklistCorner(sheet);
+          else parsed = parseChecklistExclusivo(sheet);
+
           ultimoChecklistCentro = { centro: centroNombre, data: parsed };
           integrarChecklistEnMetricas(centroNombre, parsed);
-          // KPIs de centro desde checklist
+
           $("#kpiCentroProcesos").textContent = parsed.procesosPct + "%";
           $("#kpiCentroPrueba").textContent   = parsed.convPruebaPct + "%";
           $("#kpiCentroVenta").textContent    = parsed.convVentaPct + "%";
           $("#kpiCentroHit").textContent      = parsed.hit ? "Sí" : "No";
+
           actualizarChartsCentro();
         } catch (err) {
           console.error(err);
-          alert("No se ha podido leer el checklist. Revisa el formato (CORNER / EXCLUSIVO).");
+          alert("No se ha podido leer el checklist. Revisa que sea el formato original CORNER / EXCLUSIVO.");
         }
       };
       reader.readAsArrayBuffer(file);
@@ -2618,7 +2658,7 @@
           scales:{
             x:{ ticks:{ color:getComputedStyle(document.body).getPropertyValue("--text-muted"), font:{size:10} },
                 grid:{ display:false } },
-            y:{ ticks:{ color:getComputedStyle(document.body).getPropertyValue("--text-muted"), stepSize:1, max:1, min:0 },
+            y:{ ticks:{ color:getComputedStyle(document.body).getPropertyValue("--text-muted"), font:{size:10}, stepSize:1, max:1, min:0 },
                 grid:{ color:"rgba(30,64,175,0.3)" } }
           }
         }
@@ -3166,7 +3206,7 @@
     window.addEventListener("load", () => {
       cargarCentrosDemo();
       initCalendar();
-      seedCriteriosDemo();          // datos demo para los 80 criterios
+      seedCriteriosDemo();
       initDashboardCharts();
       actualizarDashboardDesdeAcum();
     });
